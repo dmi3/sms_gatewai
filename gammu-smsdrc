@@ -21,4 +21,4 @@ outboxpath = /var/spool/gammu/outbox/
 sentsmspath = /var/spool/gammu/sent/
 errorsmspath = /var/spool/gammu/error/
 
-runonreceive = /usr/bin/python /home/graf/projects/python/sms_gatewai/receive.py
+runonreceive = /usr/bin/python /opt/sms_gatewai/Receive.pyc
