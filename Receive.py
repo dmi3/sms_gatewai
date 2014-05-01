@@ -8,11 +8,17 @@ import re
 from TeuxDeux import TeuxDeux
 
 def extractDateNText(text):  
-  day = datetime.date.today().day
-  month = datetime.date.today().month
-  year = datetime.date.today().year
+  date = datetime.date.today()
+  day = date.day
+  month = date.month
+  year = date.year
 
-  date_n_text=re.findall(r'^([1-3]?\d{1})/(1?\d?)/?(\d{0,4})\s?(.*)',text)
+  dot_or_slash = '[\./]'
+  _1_to_31 = '[0-3]?\d{1}'
+  _1_to_12 = '[01]?\d?'
+  _0000_to_2000 = '\d{0,4}'
+
+  date_n_text=re.findall(r'^('+_1_to_31+')'+dot_or_slash+'('+_1_to_12+')'+dot_or_slash+'?('+_0000_to_2000+')\s?(.*)',text)
   if len(date_n_text)>0 and len(date_n_text[0])==4:
     
     if date_n_text[0][0]!='':
@@ -24,9 +30,16 @@ def extractDateNText(text):
     if date_n_text[0][2]!='':
       year = int(date_n_text[0][2])
 
-    text = date_n_text[0][3]
+    try:
+      parsed_date = datetime.date(year, month, day)
+      if parsed_date > date:
+        date = parsed_date
+        if date_n_text[0][3].strip()!='':
+          text = date_n_text[0][3]
+    except ValueError:
+      pass
 
-  return text, datetime.date(year, month, day)
+  return text, date
 
 def main():
   text = ''
