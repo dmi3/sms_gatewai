@@ -5,6 +5,7 @@ import logging
 import traceback
 import datetime
 import re
+from Settings import *
 from TeuxDeux import TeuxDeux
 
 def extractDateNText(text):  
@@ -48,8 +49,9 @@ def main():
       text += os.environ[env]
 
   logging.debug('Number %s have sent text: %s' % (os.environ['SMS_1_NUMBER'], text))
+  logging.debug('Connecting to todo with %s:%s****' % (username, password[0]))
 
-  td=TeuxDeux("user","pass")
+  td=TeuxDeux(username, password)
   td.create(*extractDateNText(text))
 
 def log_except_hook(*exc_info):

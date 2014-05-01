@@ -7,9 +7,11 @@ import datetime
 import os
 from mockito import when, any, verify
 
+import Settings
 from Receive import main
 from Receive import extractDateNText
 from TeuxDeux import TeuxDeux
+
 
 year = 2012
 month = 5
@@ -29,6 +31,22 @@ class ReceiveTest(unittest.TestCase):
     TeuxDeux.__init__ = do_nothing
     when(TeuxDeux).create(any()).thenReturn("")
     datetime.date = MockDate
+
+  def testSettings(self):
+    global constructor_called
+    constructor_called = False    
+    
+    def verify_constructor(s, user, pwd):
+      global constructor_called
+      self.assertEqual(user, Settings.username)
+      self.assertEqual(pwd, Settings.password)
+      constructor_called = True
+
+    TeuxDeux.__init__ = verify_constructor
+
+    main()
+
+    self.assertTrue(constructor_called)
   
   def testConcat(self):
     os.environ = {
